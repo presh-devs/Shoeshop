@@ -1,14 +1,16 @@
 package com.example.shoeshop
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shoeshop.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnShoeItemClickListener {
 
 
     lateinit var binding:ActivityMainBinding
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         ShoeRecycler.layoutManager = LinearLayoutManager(this)
         ShoeRecycler.addItemDecoration(DividerItemDecoration(this,1))
-        ShoeRecycler. adapter = ShoeAdapter(shoelist)
+        ShoeRecycler. adapter = ShoeAdapter(shoelist, this)
 
     }
 
@@ -33,5 +35,14 @@ class MainActivity : AppCompatActivity() {
         shoelist.add(Shoes("react","good shoe,good shoe,good shoe,good shoe,good shoe,good shoe", R.drawable.react) )
         shoelist.add(Shoes("r","good shoe,good shoe,good shoe,good shoe,good shoe,good shoe", R.drawable.r) )
 
+    }
+
+    override fun onItemClick(item: Shoes, position: Int) {
+        Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, ShoeDetailsActivity::class.java)
+        intent.putExtra("SHOENAME", item.name)
+        intent.putExtra("SHOEDESC", item.description)
+        intent.putExtra("SHOELOGO", item.logo.toString())
+        startActivity(intent)
     }
 }

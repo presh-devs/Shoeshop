@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layout_item_view.view.*
 
-class ShoeAdapter(var items : ArrayList<Shoes>) : RecyclerView.Adapter<ShoeViewHolder>(){
+class ShoeAdapter(var items : ArrayList<Shoes>, var clickListener: OnShoeItemClickListener) : RecyclerView.Adapter<ShoeViewHolder>(){
     override fun getItemCount(): Int {
         return items.size
     }
@@ -21,6 +21,7 @@ class ShoeAdapter(var items : ArrayList<Shoes>) : RecyclerView.Adapter<ShoeViewH
         holder.shoeName?.text = items.get(position) .name
         holder.shoeDescription?.text = items.get(position) .description
         holder.shoeLogo. setImageResource(items.get(position).logo)
+        holder.initialize(items.get(position), clickListener)
     }
 }
 
@@ -28,4 +29,19 @@ class ShoeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     var shoeName = itemView.shoename
     var shoeDescription = itemView.shoedescription
     var shoeLogo = itemView.shoelogo
+
+    fun initialize(item: Shoes, action:OnShoeItemClickListener){
+        shoeName.text = item.name
+        shoeDescription.text = item.description
+        shoeLogo.setImageResource(item.logo)
+
+        itemView.setOnClickListener{
+            action.onItemClick(item, adapterPosition)
+        }
+    }
+}
+
+interface OnShoeItemClickListener{
+    fun onItemClick(item: Shoes, position: Int)
+
 }
